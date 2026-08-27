@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 import { useItemsStore } from '@/stores/items'
 
@@ -21,6 +22,7 @@ const quantityTouched = ref(false)
 const createError = ref('')
 const nameInput = ref<HTMLInputElement | null>(null)
 const showLoadingSkeleton = ref(false)
+const route = useRoute()
 
 let loadingTimer: number | undefined
 
@@ -58,6 +60,10 @@ const quantityError = computed(() => {
   return ''
 })
 
+const highlightedItemId = computed(() =>
+  typeof route.query.item === 'string' ? route.query.item : null,
+)
+
 async function loadItems() {
   window.clearTimeout(loadingTimer)
 
@@ -65,7 +71,7 @@ async function loadItems() {
     showLoadingSkeleton.value = true
   }, 300)
 
-  await itemsStore.fetchItems(props.workspaceId)
+  await itemsStore.ensureItems(props.workspaceId)
 
   window.clearTimeout(loadingTimer)
   showLoadingSkeleton.value = false
@@ -278,7 +284,12 @@ onBeforeUnmount(() => {
       <li
         v-for="item in visibleItems"
         :key="item.id"
-        class="rounded-xl border border-slate-800 bg-slate-900 px-5 py-4"
+        class="rounded-xl border bg-slate-900 px-5 py-4 transition"
+        :class="
+          item.id === highlightedItemId
+            ? 'border-emerald-500 ring-2 ring-emerald-500/20'
+            : 'border-slate-800'
+        "
       >
         <div class="flex items-start justify-between gap-4">
           <div class="min-w-0">

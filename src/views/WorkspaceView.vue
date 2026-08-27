@@ -7,6 +7,7 @@ import { useLocationsStore, type Location } from '@/stores/locations'
 import { useWorkspacesStore } from '@/stores/workspaces'
 
 import LocationItems from '@/components/LocationItems.vue'
+import WorkspaceSearch from '@/components/WorkspaceSearch.vue'
 
 const route = useRoute()
 const locationsStore = useLocationsStore()
@@ -232,6 +233,12 @@ onBeforeUnmount(() => {
             Ajouter un emplacement
           </button>
         </header>
+
+        <WorkspaceSearch
+          v-if="workspace"
+          :workspace-id="workspaceId"
+          :workspace-name="workspace.name"
+        />
 
         <form
           v-if="formVisible"

@@ -38,6 +38,12 @@ export const useItemsStore = defineStore('items', () => {
   const loading = ref(false)
   const creating = ref(false)
   const loadError = ref('')
+  const loadedWorkspaceId = ref<string | null>(null)
+
+  let pendingFetch: {
+    workspaceId: string
+    promise: Promise<void>
+  } | null = null
 
   async function fetchItems(workspaceId: string) {
     loading.value = true
@@ -55,12 +61,37 @@ export const useItemsStore = defineStore('items', () => {
       }
 
       items.value = (data ?? []) as Item[]
+      loadedWorkspaceId.value = workspaceId
     } catch {
       items.value = []
       loadError.value = 'Impossible de charger les objets. Vérifiez votre connexion puis réessayez.'
+      loadedWorkspaceId.value = null
     } finally {
       loading.value = false
     }
+  }
+
+  function ensureItems(workspaceId: string) {
+    if (loadedWorkspaceId.value === workspaceId) {
+      return Promise.resolve()
+    }
+
+    if (pendingFetch?.workspaceId === workspaceId) {
+      return pendingFetch.promise
+    }
+
+    const promise = fetchItems(workspaceId)
+
+    pendingFetch = {
+      workspaceId,
+      promise,
+    }
+
+    return promise.finally(() => {
+      if (pendingFetch?.promise === promise) {
+        pendingFetch = null
+      }
+    })
   }
 
   async function createItem(workspaceId: string, locationId: string, input: CreateItemInput) {
@@ -105,6 +136,8 @@ export const useItemsStore = defineStore('items', () => {
   function reset() {
     items.value = []
     loadError.value = ''
+    loadedWorkspaceId.value = null
+    pendingFetch = null
   }
 
   return {
@@ -113,6 +146,7 @@ export const useItemsStore = defineStore('items', () => {
     creating,
     loadError,
     fetchItems,
+    ensureItems,
     createItem,
     reset,
   }
