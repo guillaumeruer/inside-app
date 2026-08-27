@@ -8,6 +8,7 @@ import { useWorkspacesStore } from '@/stores/workspaces'
 
 import LocationItems from '@/components/LocationItems.vue'
 import WorkspaceSearch from '@/components/WorkspaceSearch.vue'
+import LocationQrCode from '@/components/LocationQrCode.vue'
 
 const route = useRoute()
 const locationsStore = useLocationsStore()
@@ -238,6 +239,12 @@ onBeforeUnmount(() => {
           v-if="workspace"
           :workspace-id="workspaceId"
           :workspace-name="workspace.name"
+        />
+
+        <LocationQrCode
+          v-if="currentLocation"
+          :location-name="currentLocation.name"
+          :qr-token="currentLocation.qr_token"
         />
 
         <form

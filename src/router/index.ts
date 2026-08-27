@@ -29,10 +29,20 @@ const router = createRouter({
       component: () => import('@/views/WorkspaceView.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      path: '/s/:token',
+      name: 'public-location',
+      component: () => import('@/views/PublicLocationView.vue'),
+      meta: { public: true },
+    },
   ],
 })
 
 router.beforeEach(async (to) => {
+  if (to.meta.public) {
+    return
+  }
+
   const auth = useAuthStore()
 
   if (!auth.initialized) {
