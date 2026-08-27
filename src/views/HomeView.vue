@@ -233,13 +233,16 @@ onBeforeUnmount(() => {
             Votre espace est prêt. La prochaine étape sera d’y ajouter un premier emplacement.
           </p>
 
-          <button
-            type="button"
-            disabled
-            class="mt-6 cursor-not-allowed rounded-lg bg-slate-700 px-5 py-3 font-semibold text-slate-400"
+          <RouterLink
+            v-if="currentWorkspace"
+            :to="{
+              name: 'workspace',
+              params: { workspaceId: currentWorkspace.id },
+            }"
+            class="mt-6 inline-flex rounded-lg bg-emerald-500 px-5 py-3 font-semibold text-slate-950 transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           >
-            Ajouter un emplacement — bientôt
-          </button>
+            Ouvrir cet espace
+          </RouterLink>
         </section>
       </template>
     </div>
