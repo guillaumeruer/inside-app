@@ -6,6 +6,8 @@ import { useRoute } from 'vue-router'
 import { useLocationsStore, type Location } from '@/stores/locations'
 import { useWorkspacesStore } from '@/stores/workspaces'
 
+import LocationItems from '@/components/LocationItems.vue'
+
 const route = useRoute()
 const locationsStore = useLocationsStore()
 const workspacesStore = useWorkspacesStore()
@@ -227,7 +229,7 @@ onBeforeUnmount(() => {
             class="shrink-0 rounded-lg bg-emerald-500 px-4 py-2.5 font-semibold text-slate-950 transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
             @click="openForm"
           >
-            Ajouter
+            Ajouter un emplacement
           </button>
         </header>
 
@@ -293,7 +295,7 @@ onBeforeUnmount(() => {
           class="mt-8 rounded-2xl border border-dashed border-slate-700 bg-slate-900/50 p-8 text-center"
         >
           <h2 class="text-xl font-semibold">
-            {{ currentLocation ? 'Cet emplacement est vide' : 'Aucun emplacement pour le moment' }}
+            {{ currentLocation ? 'Aucun sous-emplacement' : 'Aucun emplacement pour le moment' }}
           </h2>
 
           <p class="mx-auto mt-2 max-w-md text-slate-400">
@@ -305,7 +307,9 @@ onBeforeUnmount(() => {
             class="mt-6 rounded-lg bg-emerald-500 px-5 py-3 font-semibold text-slate-950 transition hover:bg-emerald-400"
             @click="openForm"
           >
-            Ajouter mon premier emplacement
+            {{
+              currentLocation ? 'Ajouter un sous-emplacement' : 'Ajouter mon premier emplacement'
+            }}
           </button>
         </section>
 
@@ -326,6 +330,12 @@ onBeforeUnmount(() => {
             </RouterLink>
           </li>
         </ul>
+
+        <LocationItems
+          v-if="currentLocation"
+          :workspace-id="workspaceId"
+          :location-id="currentLocation.id"
+        />
       </template>
     </div>
   </main>
