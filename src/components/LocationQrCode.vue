@@ -20,7 +20,9 @@ const publicUrl = computed(() => {
     },
   })
 
-  return new URL(resolved.href, window.location.origin).href
+  const appBaseUrl = new URL(import.meta.env.BASE_URL, window.location.origin)
+
+  return new URL(resolved.href, appBaseUrl).href
 })
 
 async function copyLink() {
