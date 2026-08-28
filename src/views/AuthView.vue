@@ -126,7 +126,8 @@ async function handleSubmit() {
       return
     }
 
-    successMessage.value = 'Compte créé. Consultez votre boîte mail pour confirmer votre adresse.'
+    successMessage.value =
+      'Si cette adresse peut être utilisée, un email de confirmation a été envoyé. Si vous avez déjà un compte, passez à la connexion.'
   } catch (error) {
     formError.value = readableError(error)
   } finally {
@@ -282,10 +283,19 @@ async function handleSubmit() {
         <p
           v-if="successMessage"
           role="status"
-          class="rounded-lg border border-emerald-900 bg-emerald-950/50 p-3 text-sm text-emerald-300"
+          class="rounded-lg border border-slate-700 bg-slate-950 p-4 text-sm text-slate-300"
         >
           {{ successMessage }}
         </p>
+
+        <button
+          v-if="mode === 'sign-up'"
+          type="button"
+          class="mt-3 font-semibold text-emerald-400 hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+          @click="setMode('sign-in')"
+        >
+          J’ai déjà un compte
+        </button>
 
         <button
           type="submit"
