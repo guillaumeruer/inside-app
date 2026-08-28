@@ -3,7 +3,7 @@ import { storeToRefs } from 'pinia'
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { useItemsStore } from '@/stores/items'
+import { useItemsStore, type Item } from '@/stores/items'
 
 const props = defineProps<{
   workspaceId: string
@@ -11,23 +11,45 @@ const props = defineProps<{
 }>()
 
 const itemsStore = useItemsStore()
-const { items, loading, creating, loadError } = storeToRefs(itemsStore)
+
+const { items, loading, creating, updatingItemId, deletingItemId, loadError } =
+  storeToRefs(itemsStore)
+
+const route = useRoute()
 
 const formVisible = ref(false)
+const editingItemId = ref<string | null>(null)
+const deleteCandidateId = ref<string | null>(null)
+
 const itemName = ref('')
 const description = ref('')
 const quantity = ref<number | null>(1)
+
 const nameTouched = ref(false)
 const quantityTouched = ref(false)
-const createError = ref('')
+
+const saveError = ref('')
+const deleteError = ref('')
+
 const nameInput = ref<HTMLInputElement | null>(null)
 const showLoadingSkeleton = ref(false)
-const route = useRoute()
 
 let loadingTimer: number | undefined
 
 const visibleItems = computed(() =>
   items.value.filter((item) => item.location_id === props.locationId),
+)
+
+const isEditing = computed(() => editingItemId.value !== null)
+
+const saving = computed(
+  () =>
+    creating.value ||
+    (editingItemId.value !== null && updatingItemId.value === editingItemId.value),
+)
+
+const highlightedItemId = computed(() =>
+  typeof route.query.item === 'string' ? route.query.item : null,
 )
 
 const nameError = computed(() => {
@@ -60,10 +82,6 @@ const quantityError = computed(() => {
   return ''
 })
 
-const highlightedItemId = computed(() =>
-  typeof route.query.item === 'string' ? route.query.item : null,
-)
-
 async function loadItems() {
   window.clearTimeout(loadingTimer)
 
@@ -77,9 +95,33 @@ async function loadItems() {
   showLoadingSkeleton.value = false
 }
 
-async function openForm() {
+function resetForm() {
+  editingItemId.value = null
+  itemName.value = ''
+  description.value = ''
+  quantity.value = 1
+  nameTouched.value = false
+  quantityTouched.value = false
+  saveError.value = ''
+}
+
+async function openCreateForm() {
+  resetForm()
   formVisible.value = true
-  createError.value = ''
+
+  await nextTick()
+  nameInput.value?.focus()
+}
+
+async function openEditForm(item: Item) {
+  editingItemId.value = item.id
+  itemName.value = item.name
+  description.value = item.description ?? ''
+  quantity.value = item.quantity
+  nameTouched.value = false
+  quantityTouched.value = false
+  saveError.value = ''
+  formVisible.value = true
 
   await nextTick()
   nameInput.value?.focus()
@@ -87,37 +129,73 @@ async function openForm() {
 
 function closeForm() {
   formVisible.value = false
-  itemName.value = ''
-  description.value = ''
-  quantity.value = 1
-  nameTouched.value = false
-  quantityTouched.value = false
-  createError.value = ''
+  resetForm()
 }
 
-async function handleCreateItem() {
+async function handleSaveItem() {
   nameTouched.value = true
   quantityTouched.value = true
-  createError.value = ''
+  saveError.value = ''
 
-  if (nameError.value || quantityError.value || quantity.value === null) {
+  const validQuantity = quantity.value
+
+  if (nameError.value || quantityError.value || validQuantity === null) {
     return
   }
 
+  const input = {
+    name: itemName.value,
+    description: description.value,
+    quantity: validQuantity,
+  }
+
   try {
-    await itemsStore.createItem(props.workspaceId, props.locationId, {
-      name: itemName.value,
-      description: description.value,
-      quantity: quantity.value,
-    })
+    if (editingItemId.value) {
+      await itemsStore.updateItem(props.workspaceId, editingItemId.value, input)
+    } else {
+      await itemsStore.createItem(props.workspaceId, props.locationId, input)
+    }
 
     closeForm()
   } catch {
-    createError.value = 'La création de l’objet a échoué. Réessayez dans quelques instants.'
+    saveError.value = isEditing.value
+      ? 'La modification de l’objet a échoué. Réessayez dans quelques instants.'
+      : 'La création de l’objet a échoué. Réessayez dans quelques instants.'
+  }
+}
+
+function requestDelete(itemId: string) {
+  deleteCandidateId.value = itemId
+  deleteError.value = ''
+}
+
+function cancelDelete() {
+  deleteCandidateId.value = null
+  deleteError.value = ''
+}
+
+async function confirmDelete(itemId: string) {
+  deleteError.value = ''
+
+  try {
+    await itemsStore.deleteItem(props.workspaceId, itemId)
+
+    cancelDelete()
+  } catch {
+    deleteError.value =
+      'La suppression a échoué. L’objet a été conservé. Réessayez dans quelques instants.'
   }
 }
 
 watch(() => props.workspaceId, loadItems, { immediate: true })
+
+watch(
+  () => props.locationId,
+  () => {
+    closeForm()
+    cancelDelete()
+  },
+)
 
 onBeforeUnmount(() => {
   window.clearTimeout(loadingTimer)
@@ -136,7 +214,7 @@ onBeforeUnmount(() => {
         v-if="!formVisible && !loading && !loadError"
         type="button"
         class="shrink-0 rounded-lg bg-emerald-500 px-4 py-2.5 font-semibold text-slate-950 transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-        @click="openForm"
+        @click="openCreateForm"
       >
         Ajouter un objet
       </button>
@@ -166,9 +244,13 @@ onBeforeUnmount(() => {
       v-else-if="formVisible"
       class="mt-6 rounded-2xl border border-slate-800 bg-slate-900 p-6"
       novalidate
-      @submit.prevent="handleCreateItem"
+      @submit.prevent="handleSaveItem"
     >
-      <div>
+      <h3 class="text-lg font-semibold">
+        {{ isEditing ? 'Modifier l’objet' : 'Ajouter un objet' }}
+      </h3>
+
+      <div class="mt-5">
         <label for="item-name" class="block text-sm font-medium"> Nom de l’objet </label>
 
         <input
@@ -178,7 +260,7 @@ onBeforeUnmount(() => {
           type="text"
           maxlength="160"
           autocomplete="off"
-          :disabled="creating"
+          :disabled="saving"
           :aria-invalid="Boolean(nameError)"
           :aria-describedby="nameError ? 'item-name-error' : undefined"
           class="mt-2 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 disabled:cursor-wait disabled:bg-slate-900"
@@ -201,7 +283,7 @@ onBeforeUnmount(() => {
           min="1"
           step="1"
           inputmode="numeric"
-          :disabled="creating"
+          :disabled="saving"
           :aria-invalid="Boolean(quantityError)"
           :aria-describedby="quantityError ? 'item-quantity-error' : 'item-quantity-help'"
           class="mt-2 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 disabled:cursor-wait disabled:bg-slate-900 sm:max-w-32"
@@ -227,32 +309,40 @@ onBeforeUnmount(() => {
           id="item-description"
           v-model="description"
           rows="3"
-          :disabled="creating"
+          :disabled="saving"
           class="mt-2 w-full resize-y rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 disabled:cursor-wait disabled:bg-slate-900"
           placeholder="Blanc chaud, usage intérieur…"
         ></textarea>
       </div>
 
       <p
-        v-if="createError"
+        v-if="saveError"
         role="alert"
         class="mt-5 rounded-lg border border-red-900 bg-red-950/50 p-3 text-sm text-red-300"
       >
-        {{ createError }}
+        {{ saveError }}
       </p>
 
       <div class="mt-6 flex flex-wrap gap-3">
         <button
           type="submit"
-          :disabled="creating"
+          :disabled="saving"
           class="rounded-lg bg-emerald-500 px-4 py-2.5 font-semibold text-slate-950 transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 disabled:cursor-wait disabled:bg-emerald-800"
         >
-          {{ creating ? 'Création…' : 'Ajouter cet objet' }}
+          {{
+            saving
+              ? isEditing
+                ? 'Enregistrement…'
+                : 'Création…'
+              : isEditing
+                ? 'Enregistrer'
+                : 'Ajouter cet objet'
+          }}
         </button>
 
         <button
           type="button"
-          :disabled="creating"
+          :disabled="saving"
           class="rounded-lg border border-slate-700 px-4 py-2.5 font-medium transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
           @click="closeForm"
         >
@@ -274,7 +364,7 @@ onBeforeUnmount(() => {
       <button
         type="button"
         class="mt-6 rounded-lg bg-emerald-500 px-5 py-3 font-semibold text-slate-950 transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
-        @click="openForm"
+        @click="openCreateForm"
       >
         Ajouter mon premier objet
       </button>
@@ -305,6 +395,59 @@ onBeforeUnmount(() => {
           >
             × {{ item.quantity }}
           </span>
+        </div>
+
+        <div
+          v-if="deleteCandidateId === item.id"
+          class="mt-4 rounded-lg border border-red-900 bg-red-950/40 p-4"
+        >
+          <p class="font-medium text-red-200">Supprimer « {{ item.name }} » ?</p>
+
+          <p class="mt-1 text-sm text-red-300">Cette action est définitive.</p>
+
+          <p v-if="deleteError" role="alert" class="mt-3 text-sm text-red-300">
+            {{ deleteError }}
+          </p>
+
+          <div class="mt-4 flex flex-wrap gap-3">
+            <button
+              type="button"
+              :disabled="deletingItemId === item.id"
+              class="rounded-lg bg-red-200 px-3 py-2 text-sm font-semibold text-red-950 hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 disabled:cursor-wait disabled:bg-red-900 disabled:text-red-300"
+              @click="confirmDelete(item.id)"
+            >
+              {{ deletingItemId === item.id ? 'Suppression…' : 'Confirmer la suppression' }}
+            </button>
+
+            <button
+              type="button"
+              :disabled="deletingItemId === item.id"
+              class="rounded-lg border border-slate-700 px-3 py-2 text-sm font-medium hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+              @click="cancelDelete"
+            >
+              Annuler
+            </button>
+          </div>
+        </div>
+
+        <div v-else class="mt-4 flex flex-wrap gap-2 border-t border-slate-800 pt-3">
+          <button
+            type="button"
+            class="rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+            :aria-label="`Modifier ${item.name}`"
+            @click="openEditForm(item)"
+          >
+            Modifier
+          </button>
+
+          <button
+            type="button"
+            class="rounded-lg px-3 py-2 text-sm font-medium text-red-300 hover:bg-red-950/50 hover:text-red-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+            :aria-label="`Supprimer ${item.name}`"
+            @click="requestDelete(item.id)"
+          >
+            Supprimer
+          </button>
         </div>
       </li>
     </ul>

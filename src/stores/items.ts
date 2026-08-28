@@ -15,7 +15,7 @@ export interface Item {
   updated_at: string
 }
 
-interface CreateItemInput {
+interface ItemInput {
   name: string
   description: string
   quantity: number
@@ -37,6 +37,8 @@ export const useItemsStore = defineStore('items', () => {
   const items = ref<Item[]>([])
   const loading = ref(false)
   const creating = ref(false)
+  const updatingItemId = ref<string | null>(null)
+  const deletingItemId = ref<string | null>(null)
   const loadError = ref('')
   const loadedWorkspaceId = ref<string | null>(null)
 
@@ -94,7 +96,7 @@ export const useItemsStore = defineStore('items', () => {
     })
   }
 
-  async function createItem(workspaceId: string, locationId: string, input: CreateItemInput) {
+  async function createItem(workspaceId: string, locationId: string, input: ItemInput) {
     creating.value = true
 
     try {
@@ -133,6 +135,65 @@ export const useItemsStore = defineStore('items', () => {
     }
   }
 
+  async function updateItem(workspaceId: string, itemId: string, input: ItemInput) {
+    updatingItemId.value = itemId
+
+    try {
+      const { data, error } = await supabase
+        .from('items')
+        .update({
+          name: input.name.trim(),
+          description: input.description.trim() || null,
+          quantity: input.quantity,
+        })
+        .eq('id', itemId)
+        .eq('workspace_id', workspaceId)
+        .select(itemColumns)
+        .single()
+
+      if (error) {
+        throw error
+      }
+
+      const updatedItem = data as Item
+      const itemIndex = items.value.findIndex((item) => item.id === updatedItem.id)
+
+      if (itemIndex !== -1) {
+        items.value[itemIndex] = updatedItem
+      }
+
+      return updatedItem
+    } finally {
+      if (updatingItemId.value === itemId) {
+        updatingItemId.value = null
+      }
+    }
+  }
+
+  async function deleteItem(workspaceId: string, itemId: string) {
+    deletingItemId.value = itemId
+
+    try {
+      const { error } = await supabase
+        .from('items')
+        .delete()
+        .eq('id', itemId)
+        .eq('workspace_id', workspaceId)
+        .select('id')
+        .single()
+
+      if (error) {
+        throw error
+      }
+
+      items.value = items.value.filter((item) => item.id !== itemId)
+    } finally {
+      if (deletingItemId.value === itemId) {
+        deletingItemId.value = null
+      }
+    }
+  }
+
   function reset() {
     items.value = []
     loadError.value = ''
@@ -144,10 +205,14 @@ export const useItemsStore = defineStore('items', () => {
     items,
     loading,
     creating,
+    updatingItemId,
+    deletingItemId,
     loadError,
     fetchItems,
     ensureItems,
     createItem,
+    updateItem,
+    deleteItem,
     reset,
   }
 })
