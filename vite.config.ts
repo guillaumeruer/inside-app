@@ -17,7 +17,7 @@ export default defineConfig({
     tailwindcss(),
 
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
 
       includeAssets: ['favicon.ico', 'icons/apple-touch-icon.png', 'icons/inside-icon.svg'],
 
@@ -25,6 +25,7 @@ export default defineConfig({
         id: './',
         name: 'Inside — Rangement intelligent',
         short_name: 'Inside',
+        lang: 'fr',
         description: 'Retrouvez ce qui se trouve dans vos boîtes, tiroirs et placards.',
 
         start_url: './',
