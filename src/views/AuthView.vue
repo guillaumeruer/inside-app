@@ -17,6 +17,8 @@ const showPassword = ref(false)
 const submitting = ref(false)
 const formError = ref('')
 const successMessage = ref('')
+const confirmPassword = ref('')
+const confirmPasswordTouched = ref(false)
 
 const emailError = computed(() => {
   if (!emailTouched.value) return ''
@@ -46,8 +48,26 @@ const passwordError = computed(() => {
   return ''
 })
 
+const confirmPasswordError = computed(() => {
+  if (mode.value !== 'sign-up' || !confirmPasswordTouched.value) {
+    return ''
+  }
+
+  if (!confirmPassword.value) {
+    return 'Confirmez votre mot de passe.'
+  }
+
+  if (confirmPassword.value !== password.value) {
+    return 'Les mots de passe ne correspondent pas.'
+  }
+
+  return ''
+})
+
 function setMode(nextMode: 'sign-in' | 'sign-up') {
   mode.value = nextMode
+  confirmPassword.value = ''
+  confirmPasswordTouched.value = false
   formError.value = ''
   successMessage.value = ''
 }
@@ -82,10 +102,13 @@ async function goAfterAuthentication() {
 async function handleSubmit() {
   emailTouched.value = true
   passwordTouched.value = true
+  confirmPasswordTouched.value = mode.value === 'sign-up'
   formError.value = ''
   successMessage.value = ''
 
-  if (emailError.value || passwordError.value) return
+  if (emailError.value || passwordError.value || confirmPasswordError.value) {
+    return
+  }
 
   submitting.value = true
 
@@ -205,6 +228,46 @@ async function handleSubmit() {
 
           <p v-if="passwordError" id="password-error" class="mt-2 text-sm text-red-400">
             {{ passwordError }}
+          </p>
+        </div>
+
+        <div v-if="mode === 'sign-up'">
+          <label for="confirm-password" class="block text-sm font-medium">
+            Confirmer le mot de passe
+          </label>
+
+          <input
+            id="confirm-password"
+            v-model="confirmPassword"
+            :type="showPassword ? 'text' : 'password'"
+            autocomplete="new-password"
+            :disabled="submitting"
+            :aria-invalid="Boolean(confirmPasswordError)"
+            :aria-describedby="
+              confirmPasswordError
+                ? 'confirm-password-error'
+                : confirmPasswordTouched
+                  ? 'confirm-password-success'
+                  : undefined
+            "
+            class="mt-2 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-white outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 disabled:cursor-wait disabled:bg-slate-900"
+            @blur="confirmPasswordTouched = true"
+          />
+
+          <p
+            v-if="confirmPasswordError"
+            id="confirm-password-error"
+            class="mt-2 text-sm text-red-400"
+          >
+            {{ confirmPasswordError }}
+          </p>
+
+          <p
+            v-else-if="confirmPasswordTouched"
+            id="confirm-password-success"
+            class="mt-2 text-sm text-emerald-400"
+          >
+            Les mots de passe correspondent.
           </p>
         </div>
 
