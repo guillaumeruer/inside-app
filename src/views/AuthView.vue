@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Button from '@/components/Button.vue'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -288,20 +289,17 @@ async function handleSubmit() {
           {{ successMessage }}
         </p>
 
-        <button
+        <Button
           v-if="mode === 'sign-up'"
           type="button"
+          variant="primary"
           class="mt-3 font-semibold text-emerald-400 hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
           @click="setMode('sign-in')"
         >
           J’ai déjà un compte
-        </button>
+        </Button>
 
-        <button
-          type="submit"
-          :disabled="submitting"
-          class="w-full rounded-lg bg-emerald-500 px-4 py-3 font-semibold text-slate-950 transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 disabled:cursor-wait disabled:bg-emerald-800"
-        >
+        <Button type="submit" :variant="submitting ? 'disabled' : 'primary'">
           {{
             submitting
               ? 'Veuillez patienter…'
@@ -309,7 +307,7 @@ async function handleSubmit() {
                 ? 'Se connecter'
                 : 'Créer mon compte'
           }}
-        </button>
+        </Button>
       </form>
     </section>
   </main>
