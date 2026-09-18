@@ -1,9 +1,133 @@
+<template>
+  <main class="flex min-h-screen items-center justify-center bg-bg px-4 py-12 text-text">
+    <Card>
+      <p class="text-sm font-semibold text-primary">Inside</p>
+
+      <h1 class="mt-2 text-3xl font-bold">
+        {{ mode === 'sign-in' ? 'Bon retour' : 'Créer un compte' }}
+      </h1>
+
+      <p class="mt-2 text-sm leading-6 text-text-secondary">
+        {{
+          mode === 'sign-in'
+            ? 'Connectez-vous pour retrouver vos rangements.'
+            : 'Commencez à organiser vos espaces et vos objets.'
+        }}
+      </p>
+
+      <div class="mt-6 grid grid-cols-2 rounded-lg bg-bg p-1">
+        <button
+          type="button"
+          class="rounded-md px-3 py-2 text-sm font-medium transition"
+          :class="
+            mode === 'sign-in' ? 'bg-primary text-white' : 'text-primary hover:text-primary-hover'
+          "
+          @click="setMode('sign-in')"
+        >
+          Connexion
+        </button>
+
+        <button
+          type="button"
+          class="rounded-md px-3 py-2 text-sm font-medium transition"
+          :class="
+            mode === 'sign-up' ? 'bg-primary text-white' : 'text-primary hover:text-primary-hover'
+          "
+          @click="setMode('sign-up')"
+        >
+          Inscription
+        </button>
+      </div>
+
+      <form class="mt-6 space-y-5" novalidate @submit.prevent="handleSubmit">
+        <InputGroup
+          v-model="email"
+          input-id="email"
+          input-type="email"
+          :input-error="emailError"
+          :input-disabled="submitting"
+          input-placeholder="vous@exemple.fr"
+          input-autocomplete="email"
+          @blur="emailTouched = true"
+        >
+          <template #label>Adresse email</template>
+        </InputGroup>
+
+        <InputGroup
+          v-model="password"
+          input-id="password"
+          :input-type="showPassword ? 'text' : 'password'"
+          :input-error="passwordError"
+          :input-disabled="submitting"
+          input-placeholder="vous@exemple.fr"
+          :input-autocomplete="mode === 'sign-in' ? 'current-password' : 'new-password'"
+          @blur="passwordTouched = true"
+        >
+          <template #label>Mot de passe</template>
+        </InputGroup>
+
+        <InputGroup
+          v-if="mode === 'sign-up'"
+          v-model="confirmPassword"
+          input-id="confirm-password"
+          :input-type="showPassword ? 'text' : 'password'"
+          :input-error="confirmPasswordError"
+          :input-disabled="submitting"
+          input-placeholder="vous@exemple.fr"
+          input-autocomplete=""
+          @blur="confirmPasswordTouched = true"
+        >
+          <template #label>Confirmer le mot de passe</template>
+        </InputGroup>
+
+        <p
+          v-if="formError"
+          role="alert"
+          class="rounded-lg border border-red-900 bg-red-950/50 p-3 text-sm text-red-300"
+        >
+          {{ formError }}
+        </p>
+
+        <p
+          v-if="successMessage"
+          role="status"
+          class="rounded-lg border border-slate-700 bg-slate-950 p-4 text-sm text-slate-300"
+        >
+          {{ successMessage }}
+        </p>
+
+        <Button
+          v-if="mode === 'sign-up'"
+          type="button"
+          variant="primary"
+          class="mt-3 font-semibold text-emerald-400 hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+          @click="setMode('sign-in')"
+        >
+          J’ai déjà un compte
+        </Button>
+
+        <Button type="submit" variant="primary" :disabled="submitting">
+          {{
+            submitting
+              ? 'Veuillez patienter…'
+              : mode === 'sign-in'
+                ? 'Se connecter'
+                : 'Créer mon compte'
+          }}
+        </Button>
+      </form>
+    </Card>
+  </main>
+</template>
+
 <script setup lang="ts">
 import Button from '@/components/Button.vue'
+import Card from '@/components/Card.vue'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useAuthStore } from '@/stores/auth'
+import InputGroup from '@/components/InputGroup.vue'
 
 const auth = useAuthStore()
 const route = useRoute()
@@ -136,179 +260,3 @@ async function handleSubmit() {
   }
 }
 </script>
-
-<template>
-  <main class="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-12 text-white">
-    <section
-      class="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl shadow-black/20 sm:p-8"
-    >
-      <p class="text-sm font-semibold text-emerald-400">Inside</p>
-
-      <h1 class="mt-2 text-3xl font-bold">
-        {{ mode === 'sign-in' ? 'Bon retour' : 'Créer un compte' }}
-      </h1>
-
-      <p class="mt-2 text-sm leading-6 text-slate-400">
-        {{
-          mode === 'sign-in'
-            ? 'Connectez-vous pour retrouver vos rangements.'
-            : 'Commencez à organiser vos espaces et vos objets.'
-        }}
-      </p>
-
-      <div class="mt-6 grid grid-cols-2 rounded-lg bg-slate-950 p-1">
-        <button
-          type="button"
-          class="rounded-md px-3 py-2 text-sm font-medium transition"
-          :class="
-            mode === 'sign-in' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-white'
-          "
-          @click="setMode('sign-in')"
-        >
-          Connexion
-        </button>
-
-        <button
-          type="button"
-          class="rounded-md px-3 py-2 text-sm font-medium transition"
-          :class="
-            mode === 'sign-up' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-white'
-          "
-          @click="setMode('sign-up')"
-        >
-          Inscription
-        </button>
-      </div>
-
-      <form class="mt-6 space-y-5" novalidate @submit.prevent="handleSubmit">
-        <div>
-          <label for="email" class="block text-sm font-medium"> Adresse email </label>
-
-          <input
-            id="email"
-            v-model="email"
-            type="email"
-            autocomplete="email"
-            :disabled="submitting"
-            :aria-invalid="Boolean(emailError)"
-            :aria-describedby="emailError ? 'email-error' : undefined"
-            class="mt-2 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 disabled:cursor-wait disabled:bg-slate-900"
-            placeholder="vous@exemple.fr"
-            @blur="emailTouched = true"
-          />
-
-          <p v-if="emailError" id="email-error" class="mt-2 text-sm text-red-400">
-            {{ emailError }}
-          </p>
-        </div>
-
-        <div>
-          <label for="password" class="block text-sm font-medium"> Mot de passe </label>
-
-          <div class="relative mt-2">
-            <input
-              id="password"
-              v-model="password"
-              :type="showPassword ? 'text' : 'password'"
-              :autocomplete="mode === 'sign-in' ? 'current-password' : 'new-password'"
-              :disabled="submitting"
-              :aria-invalid="Boolean(passwordError)"
-              :aria-describedby="passwordError ? 'password-error' : undefined"
-              class="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 pr-20 text-white outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 disabled:cursor-wait disabled:bg-slate-900"
-              @blur="passwordTouched = true"
-            />
-
-            <button
-              type="button"
-              class="absolute inset-y-0 right-3 text-sm font-medium text-slate-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
-              :aria-label="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
-              @click="showPassword = !showPassword"
-            >
-              {{ showPassword ? 'Masquer' : 'Afficher' }}
-            </button>
-          </div>
-
-          <p v-if="passwordError" id="password-error" class="mt-2 text-sm text-red-400">
-            {{ passwordError }}
-          </p>
-        </div>
-
-        <div v-if="mode === 'sign-up'">
-          <label for="confirm-password" class="block text-sm font-medium">
-            Confirmer le mot de passe
-          </label>
-
-          <input
-            id="confirm-password"
-            v-model="confirmPassword"
-            :type="showPassword ? 'text' : 'password'"
-            autocomplete="new-password"
-            :disabled="submitting"
-            :aria-invalid="Boolean(confirmPasswordError)"
-            :aria-describedby="
-              confirmPasswordError
-                ? 'confirm-password-error'
-                : confirmPasswordTouched
-                  ? 'confirm-password-success'
-                  : undefined
-            "
-            class="mt-2 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-white outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 disabled:cursor-wait disabled:bg-slate-900"
-            @blur="confirmPasswordTouched = true"
-          />
-
-          <p
-            v-if="confirmPasswordError"
-            id="confirm-password-error"
-            class="mt-2 text-sm text-red-400"
-          >
-            {{ confirmPasswordError }}
-          </p>
-
-          <p
-            v-else-if="confirmPasswordTouched"
-            id="confirm-password-success"
-            class="mt-2 text-sm text-emerald-400"
-          >
-            Les mots de passe correspondent.
-          </p>
-        </div>
-
-        <p
-          v-if="formError"
-          role="alert"
-          class="rounded-lg border border-red-900 bg-red-950/50 p-3 text-sm text-red-300"
-        >
-          {{ formError }}
-        </p>
-
-        <p
-          v-if="successMessage"
-          role="status"
-          class="rounded-lg border border-slate-700 bg-slate-950 p-4 text-sm text-slate-300"
-        >
-          {{ successMessage }}
-        </p>
-
-        <Button
-          v-if="mode === 'sign-up'"
-          type="button"
-          variant="primary"
-          class="mt-3 font-semibold text-emerald-400 hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
-          @click="setMode('sign-in')"
-        >
-          J’ai déjà un compte
-        </Button>
-
-        <Button type="submit" :variant="submitting ? 'disabled' : 'primary'">
-          {{
-            submitting
-              ? 'Veuillez patienter…'
-              : mode === 'sign-in'
-                ? 'Se connecter'
-                : 'Créer mon compte'
-          }}
-        </Button>
-      </form>
-    </section>
-  </main>
-</template>

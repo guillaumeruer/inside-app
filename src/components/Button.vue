@@ -9,8 +9,7 @@ import { computed } from 'vue'
 
 const styles = {
   primary:
-    'w-full rounded-lg bg-emerald-500 px-4 py-3 font-semibold text-slate-950 transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 disabled:cursor-wait disabled:bg-emerald-800',
-  disabled: '',
+    'w-full rounded-lg px-4 py-3 font-semibold bg-primary text-white hover:bg-primary-hover transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
 }
 
 const props = defineProps<{
