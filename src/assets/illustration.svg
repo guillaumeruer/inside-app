@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 400" width="460" height="400" aria-hidden="true">
+  <ellipse cx="215" cy="352" rx="175" ry="22" fill="#E0A332"/>
+
+  <!-- Carton du fond -->
+  <g transform="translate(300,140) scale(0.9)" stroke="#3B2414" stroke-linejoin="round">
+    <polygon points="16,35 60,60 60,110 16,85" fill="#C9782E" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <polygon points="60,60 104,35 104,85 60,110" fill="#A85A1F" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <polygon points="60,10 104,35 60,60 16,35" fill="#FFD27A" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <polygon points="33.6,45 77.6,20 86.4,25 42.4,50" fill="#FFF1C9" stroke-width="2" vector-effect="non-scaling-stroke"/>
+    <polygon points="33.6,45 42.4,50 42.4,72 33.6,67" fill="#F3D79A" stroke-width="2" vector-effect="non-scaling-stroke"/>
+  </g>
+
+  <!-- Grand carton avec étiquette QR -->
+  <g transform="translate(40,150) scale(1.7)" stroke="#3B2414" stroke-linejoin="round">
+    <polygon points="16,35 60,60 60,110 16,85" fill="#C9782E" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <polygon points="60,60 104,35 104,85 60,110" fill="#A85A1F" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <polygon points="60,10 104,35 60,60 16,35" fill="#FFD27A" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <polygon points="33.6,45 42.4,50 42.4,72 33.6,67" fill="#F3D79A" stroke-width="2" vector-effect="non-scaling-stroke"/>
+    <g transform="matrix(0.8696,-0.4941,0,1,60,60)">
+      <rect x="8" y="8" width="34" height="34" rx="1.5" fill="#FFFDF5" stroke="#3B2414" stroke-width="1.2"/>
+      <path transform="translate(10.5,10.5) scale(1.00000)" fill="#3B2414" stroke="none" d="M0 0h7v1h-7zM10 0h1v1h-1zM14 0h2v1h-2zM18 0h2v1h-2zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM9 1h1v1h-1zM13 1h4v1h-4zM18 1h2v1h-2zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM8 2h1v1h-1zM11 2h1v1h-1zM14 2h1v1h-1zM16 2h1v1h-1zM19 2h1v1h-1zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM9 3h1v1h-1zM12 3h1v1h-1zM14 3h1v1h-1zM18 3h1v1h-1zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM9 4h1v1h-1zM12 4h1v1h-1zM14 4h2v1h-2zM17 4h4v1h-4zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM10 5h8v1h-8zM19 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM8 7h1v1h-1zM11 7h1v1h-1zM13 7h2v1h-2zM17 7h2v1h-2zM0 8h3v1h-3zM4 8h5v1h-5zM12 8h3v1h-3zM17 8h1v1h-1zM21 8h2v1h-2zM26 8h1v1h-1zM0 9h1v1h-1zM2 9h3v1h-3zM8 9h2v1h-2zM11 9h2v1h-2zM16 9h3v1h-3zM20 9h3v1h-3zM25 9h1v1h-1zM28 9h1v1h-1zM1 10h2v1h-2zM5 10h2v1h-2zM10 10h3v1h-3zM16 10h1v1h-1zM21 10h1v1h-1zM24 10h1v1h-1zM26 10h3v1h-3zM0 11h1v1h-1zM2 11h1v1h-1zM4 11h1v1h-1zM8 11h3v1h-3zM12 11h3v1h-3zM16 11h2v1h-2zM19 11h3v1h-3zM24 11h1v1h-1zM27 11h1v1h-1zM1 12h2v1h-2zM4 12h1v1h-1zM6 12h1v1h-1zM10 12h2v1h-2zM13 12h1v1h-1zM15 12h3v1h-3zM20 12h3v1h-3zM25 12h1v1h-1zM27 12h2v1h-2zM2 13h1v1h-1zM5 13h1v1h-1zM7 13h1v1h-1zM9 13h3v1h-3zM13 13h1v1h-1zM16 13h1v1h-1zM20 13h3v1h-3zM25 13h1v1h-1zM28 13h1v1h-1zM0 14h2v1h-2zM3 14h2v1h-2zM6 14h1v1h-1zM14 14h1v1h-1zM18 14h1v1h-1zM22 14h4v1h-4zM27 14h2v1h-2zM2 15h1v1h-1zM7 15h3v1h-3zM11 15h1v1h-1zM13 15h3v1h-3zM17 15h1v1h-1zM19 15h2v1h-2zM23 15h3v1h-3zM27 15h1v1h-1zM0 16h2v1h-2zM5 16h2v1h-2zM8 16h1v1h-1zM12 16h2v1h-2zM15 16h3v1h-3zM21 16h2v1h-2zM25 16h1v1h-1zM27 16h2v1h-2zM1 17h2v1h-2zM4 17h1v1h-1zM11 17h4v1h-4zM16 17h3v1h-3zM20 17h1v1h-1zM22 17h1v1h-1zM25 17h2v1h-2zM28 17h1v1h-1zM0 18h1v1h-1zM2 18h3v1h-3zM6 18h1v1h-1zM8 18h2v1h-2zM11 18h2v1h-2zM14 18h1v1h-1zM20 18h5v1h-5zM27 18h2v1h-2zM1 19h1v1h-1zM5 19h1v1h-1zM7 19h1v1h-1zM10 19h1v1h-1zM12 19h2v1h-2zM16 19h3v1h-3zM25 19h1v1h-1zM27 19h1v1h-1zM0 20h1v1h-1zM2 20h2v1h-2zM6 20h1v1h-1zM8 20h1v1h-1zM10 20h2v1h-2zM13 20h1v1h-1zM15 20h3v1h-3zM20 20h5v1h-5zM8 21h2v1h-2zM11 21h1v1h-1zM13 21h2v1h-2zM17 21h1v1h-1zM20 21h1v1h-1zM24 21h1v1h-1zM26 21h3v1h-3zM0 22h7v1h-7zM8 22h1v1h-1zM10 22h1v1h-1zM14 22h1v1h-1zM17 22h4v1h-4zM22 22h1v1h-1zM24 22h2v1h-2zM27 22h2v1h-2zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM10 23h2v1h-2zM13 23h1v1h-1zM16 23h2v1h-2zM20 23h1v1h-1zM24 23h2v1h-2zM28 23h1v1h-1zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM8 24h1v1h-1zM10 24h1v1h-1zM12 24h7v1h-7zM20 24h5v1h-5zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM11 25h2v1h-2zM16 25h1v1h-1zM24 25h1v1h-1zM26 25h3v1h-3zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM8 26h1v1h-1zM11 26h3v1h-3zM17 26h1v1h-1zM19 26h2v1h-2zM23 26h3v1h-3zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM8 27h3v1h-3zM12 27h4v1h-4zM17 27h1v1h-1zM19 27h2v1h-2zM22 27h1v1h-1zM24 27h1v1h-1zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h1v1h-1zM11 28h2v1h-2zM14 28h4v1h-4zM19 28h6v1h-6zM27 28h2v1h-2z"/>
+      <g fill="none" stroke="#FFF1C9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 10V3H10"/>
+        <path d="M40 3H47V10"/>
+        <path d="M47 40V47H40"/>
+        <path d="M10 47H3V40"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- Petit carton posé dessus -->
+  <g transform="translate(82,124.5)" stroke="#3B2414" stroke-linejoin="round">
+    <polygon points="16,35 60,60 60,110 16,85" fill="#C9782E" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <polygon points="60,60 104,35 104,85 60,110" fill="#A85A1F" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <polygon points="60,10 104,35 60,60 16,35" fill="#FFD27A" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <polygon points="33.6,45 77.6,20 86.4,25 42.4,50" fill="#FFF1C9" stroke-width="2" vector-effect="non-scaling-stroke"/>
+    <polygon points="33.6,45 42.4,50 42.4,72 33.6,67" fill="#F3D79A" stroke-width="2" vector-effect="non-scaling-stroke"/>
+  </g>
+
+  <!-- Carton de devant -->
+  <g transform="translate(200,205) scale(1.25)" stroke="#3B2414" stroke-linejoin="round">
+    <polygon points="16,35 60,60 60,110 16,85" fill="#C9782E" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <polygon points="60,60 104,35 104,85 60,110" fill="#A85A1F" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <polygon points="60,10 104,35 60,60 16,35" fill="#FFD27A" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <polygon points="33.6,45 77.6,20 86.4,25 42.4,50" fill="#FFF1C9" stroke-width="2" vector-effect="non-scaling-stroke"/>
+    <polygon points="33.6,45 42.4,50 42.4,72 33.6,67" fill="#F3D79A" stroke-width="2" vector-effect="non-scaling-stroke"/>
+  </g>
+
+
+  <!-- Étincelles -->
+  <g fill="#FFF6DC" stroke="#3B2414" stroke-width="2.5" stroke-linejoin="round">
+    <path transform="translate(62,96)" d="M0 -12 L3.5 -3.5 L12 0 L3.5 3.5 L0 12 L-3.5 3.5 L-12 0 L-3.5 -3.5Z"/>
+    <path transform="translate(400,72)" d="M0 -9 L2.6 -2.6 L9 0 L2.6 2.6 L0 9 L-2.6 2.6 L-9 0 L-2.6 -2.6Z"/>
+    <path transform="translate(420,290)" d="M0 -10 L3 -3 L10 0 L3 3 L0 10 L-3 3 L-10 0 L-3 -3Z"/>
+  </g>
+</svg>

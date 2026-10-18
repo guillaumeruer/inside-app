@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="Inside">
+  <g stroke="#3B2414" stroke-linejoin="round">
+    <polygon points="16,35 60,60 60,110 16,85" fill="#C9782E" stroke-width="4"/>
+    <polygon points="60,60 104,35 104,85 60,110" fill="#A85A1F" stroke-width="4"/>
+    <polygon points="60,10 104,35 60,60 16,35" fill="#FFD27A" stroke-width="4"/>
+    <polygon points="33.6,45 77.6,20 86.4,25 42.4,50" fill="#FFF1C9" stroke-width="3"/>
+    <polygon points="33.6,45 42.4,50 42.4,72 33.6,67" fill="#F3D79A" stroke-width="3"/>
+  </g>
+</svg>

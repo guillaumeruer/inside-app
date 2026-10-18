@@ -21,6 +21,7 @@ export function AuthProvider({ children }) {
         user: session?.user ?? null,
         loading,
         signIn: (credentials) => supabase.auth.signInWithPassword(credentials),
+        singUp: (credentials) => supabase.auth.signUp(credentials),
         signOut: () => supabase.auth.signOut(),
     };
 
