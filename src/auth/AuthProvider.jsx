@@ -14,14 +14,14 @@ export function AuthProvider({ children }) {
             }
         );
         return () => subscription.unsubscribe();
-    });
+    }, []);
 
     const value = {
         session,
         user: session?.user ?? null,
         loading,
         signIn: (credentials) => supabase.auth.signInWithPassword(credentials),
-        singUp: (credentials) => supabase.auth.signUp(credentials),
+        signgUp: (credentials) => supabase.auth.signUp(credentials),
         signOut: () => supabase.auth.signOut(),
     };
 
