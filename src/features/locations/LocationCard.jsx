@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { ChevronRight, MapPin } from 'lucide-react';
-import logoUrl from '../assets/logo.svg';
+import logoUrl from '@/assets/logo.svg';
 
 const MAX_TAGS = 3;
 
@@ -31,7 +31,9 @@ export default function LocationCard({ location }) {
       {previewItems.length > 0 && (
         <ul className="tag-list" aria-label="Quelques objets">
           {previewItems.slice(0, MAX_TAGS).map((item) => (
-            <li key={item} className="tag">{item}</li>
+            <li key={item} className="tag">
+              {item}
+            </li>
           ))}
         </ul>
       )}

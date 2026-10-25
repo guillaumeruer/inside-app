@@ -1,11 +1,11 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import '@/styles/index.css';
 import '@fontsource-variable/bricolage-grotesque';
 import '@fontsource-variable/figtree';
-import App from './App.jsx'
-import { BrowserRouter } from 'react-router'
-import { AuthProvider } from './auth/AuthProvider.jsx'
+import App from '@/App';
+import { BrowserRouter } from 'react-router';
+import { AuthProvider } from '@/features/auth/AuthProvider.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -15,4 +15,4 @@ createRoot(document.getElementById('root')).render(
       </BrowserRouter>
     </AuthProvider>
   </StrictMode>,
-) 
+);

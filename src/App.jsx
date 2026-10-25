@@ -1,15 +1,15 @@
-import { Navigate, Route, Routes } from "react-router";
-import SignIn from "./pages/SignIn.jsx";
-import SignUp from "./pages/SignUp.jsx";
-import { Home } from "./pages/Home.jsx";
-import ProtectedRoute from "./auth/ProtectedRoute.jsx";
-import GuestRoute from "./auth/GuestRoute.jsx";
-import { useAuth } from "./auth/useAuth.js";
+import { Navigate, Route, Routes } from 'react-router';
+import SignIn from '@/pages/SignInPage';
+import SignUp from '@/pages/SignUpPage';
+import { Home } from '@/pages/home/HomePage';
+import ProtectedRoute from '@/features/auth/ProtectedRoute';
+import GuestRoute from '@/features/auth/GuestRoute';
+import { useAuth } from '@/features/auth/useAuth';
 
 function RootRedirect() {
   const { user, loading } = useAuth();
   if (loading) return null;
-  return <Navigate to={user ? "/home" : "/signup"} replace />;
+  return <Navigate to={user ? '/home' : '/signup'} replace />;
 }
 
 export default function App() {

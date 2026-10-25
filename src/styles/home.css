@@ -201,14 +201,16 @@
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
 }
 
 .workspace-card:hover {
   border-color: var(--color-border);
 }
 
-.workspace-card[aria-pressed="true"] {
+.workspace-card[aria-pressed='true'] {
   border-color: var(--color-ink);
   background: var(--color-panel);
   box-shadow: 0 4px 0 var(--color-ink);
@@ -249,7 +251,7 @@
   color: var(--color-ink-muted);
 }
 
-.workspace-card[aria-pressed="true"] .workspace-card__meta {
+.workspace-card[aria-pressed='true'] .workspace-card__meta {
   color: var(--color-ink-soft);
 }
 
@@ -279,7 +281,9 @@
   background: var(--color-surface);
   color: var(--color-ink);
   text-decoration: none;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
 }
 
 .location-card:hover {
@@ -460,7 +464,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .workspace-card,
   .location-card {
     transition: none;

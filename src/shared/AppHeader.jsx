@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { Bell, Search } from 'lucide-react';
-import logoUrl from '../assets/logo.svg';
+import logoUrl from '@/assets/logo.svg';
 import AccountMenu from './AccountMenu';
 
 export default function AppHeader({ query = '', onQueryChange }) {
@@ -12,7 +12,9 @@ export default function AppHeader({ query = '', onQueryChange }) {
       </Link>
 
       <div role="search" className="search">
-        <label htmlFor="search" className="sr-only">Rechercher un objet ou un emplacement</label>
+        <label htmlFor="search" className="sr-only">
+          Rechercher un objet ou un emplacement
+        </label>
         <Search className="search__icon" aria-hidden />
         <input
           id="search"

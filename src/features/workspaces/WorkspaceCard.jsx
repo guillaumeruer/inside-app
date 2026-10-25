@@ -1,6 +1,11 @@
 import { Briefcase, House, Package, Warehouse } from 'lucide-react';
 
-const ICONS = { home: House, storage: Warehouse, office: Briefcase, other: Package };
+const ICONS = {
+  home: House,
+  storage: Warehouse,
+  office: Briefcase,
+  other: Package,
+};
 
 export default function WorkspaceCard({ workspace, selected, onSelect }) {
   const Icon = ICONS[workspace.kind] ?? House;

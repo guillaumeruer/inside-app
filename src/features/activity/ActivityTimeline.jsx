@@ -13,7 +13,9 @@ function timeAgo(date) {
 export default function ActivityTimeline({ activities }) {
   return (
     <aside className="activity" aria-labelledby="activity-title">
-      <h2 id="activity-title" className="activity__title">Activité récente</h2>
+      <h2 id="activity-title" className="activity__title">
+        Activité récente
+      </h2>
 
       {activities.length === 0 ? (
         <p className="activity__empty">Rien pour l'instant. Scanne ton premier carton !</p>
@@ -24,14 +26,18 @@ export default function ActivityTimeline({ activities }) {
               <span className="timeline__dot" aria-hidden />
               <div className="timeline__content">
                 <span className="timeline__text">{a.text}</span>
-                <time className="timeline__time" dateTime={a.createdAt}>{timeAgo(a.createdAt)}</time>
+                <time className="timeline__time" dateTime={a.createdAt}>
+                  {timeAgo(a.createdAt)}
+                </time>
               </div>
             </li>
           ))}
         </ol>
       )}
 
-      <Link to="/activity" className="activity__more">Tout voir</Link>
+      <Link to="/activity" className="activity__more">
+        Tout voir
+      </Link>
     </aside>
   );
 }
