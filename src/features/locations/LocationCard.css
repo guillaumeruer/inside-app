@@ -1,0 +1,117 @@
+.location-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  border: 2px solid var(--color-divider);
+  border-radius: 20px;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  text-decoration: none;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.location-card:hover {
+  color: var(--color-ink);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--color-divider);
+}
+
+.location-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.location-card__box {
+  width: 52px;
+  height: 52px;
+  display: block;
+}
+
+.location-card__code {
+  padding: 4px 10px;
+  border: 2px solid var(--color-ink);
+  border-radius: 999px;
+  background: var(--color-bg);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.location-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.location-card__name {
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.3px;
+  line-height: 1.15;
+}
+
+.location-card__place {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--color-ink-muted);
+}
+
+.location-card__place svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-icon);
+}
+
+.location-card__description {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--color-ink-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tag-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--color-tape);
+  color: var(--color-ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.location-card__footer {
+  margin-top: auto;
+  padding-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 2px dashed var(--color-divider);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.location-card__footer svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-ink);
+}

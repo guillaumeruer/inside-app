@@ -1,0 +1,30 @@
+.strength {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.strength__bars {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.strength__bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-divider);
+}
+
+.strength__bar[data-on='true'] {
+  background: var(--color-accent);
+}
+
+.strength__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+}

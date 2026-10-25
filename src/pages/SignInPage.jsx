@@ -1,11 +1,15 @@
 import { useState } from 'react';
-import { useAuth } from '@/features/auth/useAuth';
-import { Link, Navigate, useLocation, useNavigate } from 'react-router';
-import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router';
+import { Mail, Send } from 'lucide-react';
 import AuthLayout from '@/features/auth/AuthLayout';
+import { useAuth } from '@/features/auth/useAuth';
+import { PasswordInput } from '@/shared/PasswordInput';
+import { Button } from '@/shared/ui/Button';
+import { Divider } from '@/shared/ui/Divider';
+import { Field } from '@/shared/ui/Field';
 
-export default function Landing() {
-  const { user, loading, signIn } = useAuth();
+export default function SignIn() {
+  const { signIn } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname ?? '/home';
@@ -14,13 +18,8 @@ export default function Landing() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
-  if (!loading && user) {
-    return <Navigate to={from} replace />;
-  }
-
-  const handleSubmit = async (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
     setError(null);
     setSubmitting(true);
@@ -33,7 +32,7 @@ export default function Landing() {
       return;
     }
     navigate(from, { replace: true });
-  };
+  }
 
   return (
     <AuthLayout
@@ -51,62 +50,41 @@ export default function Landing() {
           <p className="auth__subtitle">Connectez-vous pour retrouver vos boîtes.</p>
         </div>
 
-        <div className="field">
-          <div className="field__header">
-            <label htmlFor="email" className="field__label">
-              Adresse e-mail
-            </label>
-          </div>
-          <div className="input-group">
-            <MailIcon className="input-group__icon" />
-            <input
-              id="email"
-              value={email}
-              className="input"
-              type="email"
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-        </div>
-        <div className="field">
-          <div className="field__header">
-            <label htmlFor="password" className="field__label">
-              Mot de passe
-            </label>
-            <a href="/forgot" className="field__link">
-              Mot de passe oublié ?
-            </a>
-          </div>
-          <div className="input-group">
-            <LockIcon className="input-group__icon" />
-            <input
-              id="password"
-              value={password}
-              className="input"
-              type={showPassword ? 'text' : 'password'}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button
-              type="button"
-              className="input-group__action"
-              onClick={() => setShowPassword((s) => !s)}
-            >
-              {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-            </button>
-          </div>
-        </div>
+        <Field
+          label="Adresse e-mail"
+          icon={Mail}
+          type="email"
+          autoComplete="username"
+          placeholder="vous@exemple.fr"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-        {error && <p role="alert">{error}</p>}
+        <PasswordInput
+          label="Mot de passe"
+          autoComplete="current-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          labelAction={<Link to="/forgot-password">Mot de passe oublié ?</Link>}
+          required
+        />
 
-        <button type="submit" className="btn btn--primary" disabled={submitting}>
-          {submitting ? 'Connexion...' : 'Se connecter'}
-        </button>
-        <div className="divider">ou</div>
-        <button type="button" className="btn btn--outline">
+        {error && (
+          <p className="field__error" role="alert">
+            {error}
+          </p>
+        )}
+
+        <Button type="submit" block loading={submitting} loadingText="Connexion…">
+          Se connecter
+        </Button>
+
+        <Divider>ou</Divider>
+
+        <Button variant="outline" block icon={Send}>
           Recevoir un lien magique
-        </button>
+        </Button>
 
         <p className="auth__switch">
           Pas encore de compte ? <Link to="/signup">Créer un compte</Link>

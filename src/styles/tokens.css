@@ -1,0 +1,36 @@
+:root {
+  --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body: 'Figtree Variable', 'Figtree', system-ui, sans-serif;
+
+  --color-bg: #fff6dc;
+  --color-surface: #ffffff;
+  --color-panel: #f6b93b;
+  --color-panel-shadow: #e0a332;
+
+  --color-ink: #3b2414;
+  --color-ink-soft: #4a2e18;
+  --color-ink-muted: #6e4f33;
+  --color-accent: #b4510d;
+
+  --color-accent-shadow: #6b3008;
+  --color-link: #8a3e08;
+  --color-link-hover: #5e2a05;
+  --color-focus: #f6b93b;
+
+  --color-border: #9c7a55;
+  --color-placeholder: #9a7b5c;
+  --color-icon: #8a6a4a;
+  --color-divider: #ebd3a6;
+
+  --color-box-top: #ffd27a;
+  --color-box-left: #c9782e;
+  --color-box-right: #a85a1f;
+  --color-tape: #fff1c9;
+  --color-tape-shade: #f3d79a;
+  --color-label: #fffdf5;
+
+  --radius-control: 14px;
+  --radius-panel: 32px;
+  --shadow-button: 0 4px 0 var(--color-accent-shadow);
+  --control-height: 50px;
+}

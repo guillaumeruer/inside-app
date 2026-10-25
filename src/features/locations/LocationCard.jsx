@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { ChevronRight, MapPin } from 'lucide-react';
 import logoUrl from '@/assets/logo.svg';
+import './LocationCard.css';
 
 const MAX_TAGS = 3;
 

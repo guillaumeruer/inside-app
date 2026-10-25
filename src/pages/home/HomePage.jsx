@@ -4,7 +4,7 @@ import AppHeader from '@/shared/AppHeader';
 import WorkspaceCard, { NewWorkspaceCard } from '@/features/workspaces/WorkspaceCard';
 import LocationCard from '@/features/locations/LocationCard';
 import ActivityTimeline from '@/features/activity/ActivityTimeline';
-import '@/styles/home.css';
+import './HomePage.css';
 import { useAuth } from '@/features/auth/useAuth';
 import { useHomeData } from './useHomeData';
 

@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import './ActivityTimeline.css';
 
 const relative = new Intl.RelativeTimeFormat('fr', { numeric: 'auto' });
 

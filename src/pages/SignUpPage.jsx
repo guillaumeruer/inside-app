@@ -1,64 +1,17 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
+import { Mail, User } from 'lucide-react';
 import AuthLayout from '@/features/auth/AuthLayout';
+import { MIN_PASSWORD_LENGTH, StrengthMeter } from '@/features/auth/StrengthMeter';
 import { useAuth } from '@/features/auth/useAuth';
-
-const MIN_LENGTH = 8;
-
-function getStrength(password) {
-  if (!password) return { score: 0, label: '' };
-  let score = 0;
-  if (password.length >= MIN_LENGTH) score++;
-  if (password.length >= 12) score++;
-  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
-  if (/\d/.test(password) && /[^A-Za-z0-9]/.test(password)) score++;
-  const labels = ['Trop court', 'Faible', 'Moyen', 'Solide', 'Excellent'];
-  return { score, label: password.length < MIN_LENGTH ? labels[0] : labels[score] };
-}
-
-function PasswordInput({
-  id,
-  value,
-  onChange,
-  onBlur,
-  autoComplete,
-  placeholder,
-  invalid,
-  describedBy,
-}) {
-  const [visible, setVisible] = useState(false);
-  return (
-    <div className="input-group">
-      <Lock className="input-group__icon" aria-hidden />
-      <input
-        id={id}
-        className="input"
-        type={visible ? 'text' : 'password'}
-        autoComplete={autoComplete}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
-        aria-invalid={invalid || undefined}
-        aria-describedby={describedBy}
-        required
-      />
-      <button
-        type="button"
-        className="input-group__action"
-        aria-label={visible ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
-        onClick={() => setVisible((v) => !v)}
-      >
-        {visible ? <EyeOff /> : <Eye />}
-      </button>
-    </div>
-  );
-}
+import { PasswordInput } from '@/shared/PasswordInput';
+import { Button } from '@/shared/ui/Button';
+import { Field } from '@/shared/ui/Field';
 
 export default function SignUp() {
   const { signUp } = useAuth();
   const navigate = useNavigate();
+
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -68,20 +21,15 @@ export default function SignUp() {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
 
-  const strength = getStrength(password);
-  const passwordTooShort = password.length > 0 && password.length < MIN_LENGTH;
+  const passwordTooShort = password.length > 0 && password.length < MIN_PASSWORD_LENGTH;
   const mismatch = confirm.length > 0 && confirm !== password;
-
-  const showPasswordError = touched.password && passwordTooShort;
-  const showConfirmError = touched.confirm && mismatch;
 
   const canSubmit =
     firstName.trim() &&
     email &&
-    password.length >= MIN_LENGTH &&
+    password.length >= MIN_PASSWORD_LENGTH &&
     confirm === password &&
-    acceptTerms &&
-    !submitting;
+    acceptTerms;
 
   const touch = (field) => () => setTouched((t) => ({ ...t, [field]: true }));
 
@@ -121,97 +69,59 @@ export default function SignUp() {
           <p className="auth__subtitle">Étiquetez vos cartons, scannez, retrouvez tout.</p>
         </div>
 
-        <div className="field">
-          <label htmlFor="first-name" className="field__label">
-            Prénom
-          </label>
-          <div className="input-group">
-            <User className="input-group__icon" aria-hidden />
-            <input
-              id="first-name"
-              className="input"
-              type="text"
-              autoComplete="given-name"
-              placeholder="Camille"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-            />
-          </div>
-        </div>
+        <Field
+          label="Prénom"
+          icon={User}
+          type="text"
+          autoComplete="given-name"
+          placeholder="Camille"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          required
+        />
 
-        <div className="field">
-          <label htmlFor="email" className="field__label">
-            Adresse e-mail
-          </label>
-          <div className="input-group">
-            <Mail className="input-group__icon" aria-hidden />
-            <input
-              id="email"
-              className="input"
-              type="email"
-              autoComplete="email"
-              placeholder="vous@exemple.fr"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-        </div>
+        <Field
+          label="Adresse e-mail"
+          icon={Mail}
+          type="email"
+          autoComplete="email"
+          placeholder="vous@exemple.fr"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-        <div className="field">
-          <label htmlFor="password" className="field__label">
-            Mot de passe
-          </label>
-          <PasswordInput
-            id="password"
-            autoComplete="new-password"
-            placeholder={`${MIN_LENGTH} caractères minimum`}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onBlur={touch('password')}
-            invalid={showPasswordError}
-            describedBy="password-strength password-error"
-          />
-          <div id="password-strength" className="strength" aria-live="polite">
-            <div className="strength__bars" aria-hidden>
-              {[1, 2, 3, 4].map((n) => (
-                <div key={n} className="strength__bar" data-on={strength.score >= n} />
-              ))}
-            </div>
-            {strength.label && <span className="strength__label">{strength.label}</span>}
-          </div>
-          {showPasswordError && (
-            <p id="password-error" className="field__error">
-              Le mot de passe doit faire au moins {MIN_LENGTH} caractères.
-            </p>
-          )}
-        </div>
+        <PasswordInput
+          label="Mot de passe"
+          autoComplete="new-password"
+          placeholder={`${MIN_PASSWORD_LENGTH} caractères minimum`}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onBlur={touch('password')}
+          error={
+            touched.password && passwordTooShort
+              ? `Le mot de passe doit faire au moins ${MIN_PASSWORD_LENGTH} caractères.`
+              : undefined
+          }
+          after={<StrengthMeter password={password} />}
+          required
+        />
 
-        <div className="field">
-          <label htmlFor="password-confirm" className="field__label">
-            Confirmer le mot de passe
-          </label>
-          <PasswordInput
-            id="password-confirm"
-            autoComplete="new-password"
-            placeholder="Saisissez-le à nouveau"
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-            onBlur={touch('confirm')}
-            invalid={showConfirmError}
-            describedBy="confirm-error"
-          />
-          {showConfirmError && (
-            <p id="confirm-error" className="field__error">
-              Les deux mots de passe ne correspondent pas.
-            </p>
-          )}
-        </div>
+        <PasswordInput
+          label="Confirmer le mot de passe"
+          autoComplete="new-password"
+          placeholder="Saisissez-le à nouveau"
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
+          onBlur={touch('confirm')}
+          error={
+            touched.confirm && mismatch ? 'Les deux mots de passe ne correspondent pas.' : undefined
+          }
+          required
+        />
 
-        <label htmlFor="terms" className="checkbox">
+        <label className="checkbox">
           <input
-            id="terms"
             type="checkbox"
             checked={acceptTerms}
             onChange={(e) => setAcceptTerms(e.target.checked)}
@@ -229,9 +139,15 @@ export default function SignUp() {
           </p>
         )}
 
-        <button type="submit" className="btn btn--primary" disabled={!canSubmit}>
-          {submitting ? 'Création…' : 'Créer mon compte'}
-        </button>
+        <Button
+          type="submit"
+          block
+          disabled={!canSubmit}
+          loading={submitting}
+          loadingText="Création…"
+        >
+          Créer mon compte
+        </Button>
 
         <p className="auth__switch">
           Déjà un compte ? <Link to="/login">Se connecter</Link>

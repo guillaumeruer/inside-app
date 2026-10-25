@@ -1,0 +1,33 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.logo__icon {
+  display: block;
+}
+
+.logo__name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+.logo--md .logo__icon {
+  width: 40px;
+  height: 40px;
+}
+.logo--md .logo__name {
+  font-size: 24px;
+}
+
+.logo--lg .logo__icon {
+  width: 44px;
+  height: 44px;
+}
+.logo--lg .logo__name {
+  font-size: 26px;
+}

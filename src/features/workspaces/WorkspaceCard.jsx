@@ -1,4 +1,5 @@
 import { Briefcase, House, Package, Warehouse } from 'lucide-react';
+import './WorkspaceCard.css';
 
 const ICONS = {
   home: House,
