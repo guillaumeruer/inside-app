@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Plus, ScanLine } from 'lucide-react';
-import AppHeader from '@/shared/AppHeader';
-import WorkspaceCard, { NewWorkspaceCard } from '@/features/workspaces/WorkspaceCard';
-import LocationCard from '@/features/locations/LocationCard';
 import ActivityTimeline from '@/features/activity/ActivityTimeline';
-import './HomePage.css';
 import { useAuth } from '@/features/auth/useAuth';
+import { EmptyLocations } from '@/features/locations/EmptyLocations';
+import LocationCard from '@/features/locations/LocationCard';
+import WorkspaceCard, { NewWorkspaceCard } from '@/features/workspaces/WorkspaceCard';
+import { WorkspaceOnboarding } from '@/features/workspaces/WorkspaceOnboarding';
+import AppHeader from '@/shared/AppHeader';
+import { Button } from '@/shared/ui/Button';
 import { useHomeData } from './useHomeData';
+import './HomePage.css';
 
 const ACTIVITIES = [
   {
@@ -21,6 +24,8 @@ const ACTIVITIES = [
   },
 ];
 
+const SELECTED_WORKSPACE_KEY = 'tulamiou:workspace';
+
 export function Home() {
   const { user } = useAuth();
   const firstName = user?.user_metadata?.first_name ?? '';
@@ -28,7 +33,7 @@ export function Home() {
   const [query, setQuery] = useState('');
 
   const { status, workspaces, locations, reload } = useHomeData();
-  const [selectedId, setSelectedId] = useState(() => localStorage.getItem('tulamiou:workspace'));
+  const [selectedId, setSelectedId] = useState(() => localStorage.getItem(SELECTED_WORKSPACE_KEY));
   const activeId = workspaces.some((w) => w.id === selectedId) ? selectedId : workspaces[0]?.id;
 
   const current = workspaces.find((w) => w.id === activeId);
@@ -38,8 +43,15 @@ export function Home() {
 
   const select = (id) => {
     setSelectedId(id);
-    localStorage.setItem('tulamiou:workspace', id);
+    localStorage.setItem(SELECTED_WORKSPACE_KEY, id);
   };
+
+  const handleWorkspaceCreated = (workspace) => {
+    select(workspace.id);
+    reload();
+  };
+
+  const openNewLocation = () => { };
 
   useEffect(() => {
     const onVisible = () => {
@@ -49,22 +61,29 @@ export function Home() {
     return () => document.removeEventListener('visibilitychange', onVisible);
   }, [reload]);
 
+  const hasWorkspaces = workspaces.length > 0;
+
   return (
     <div className="app">
       <AppHeader query={query} onQueryChange={setQuery} />
 
       <main className="home">
-        {status === 'loading' && <p>Chargement...</p>}
+        {status === 'loading' && <p>Chargement…</p>}
 
         {status === 'error' && (
           <div className="home__error" role="alert">
             <p className="field__error">Impossible de charger tes données.</p>
-            <button type="button" className="btn btn--outline btn--auto" onClick={reload}>
+            <Button variant="outline" onClick={reload}>
               Réessayer
-            </button>
+            </Button>
           </div>
         )}
-        {status === 'success' && (
+
+        {status === 'success' && !hasWorkspaces && (
+          <WorkspaceOnboarding onCreated={handleWorkspaceCreated} />
+        )}
+
+        {status === 'success' && hasWorkspaces && (
           <>
             <section className="home__hero">
               <div>
@@ -72,12 +91,10 @@ export function Home() {
                 <p className="home__subtitle">Tout est rangé. Enfin, presque.</p>
               </div>
               <div className="home__actions">
-                <button type="button" className="btn btn--outline btn--auto">
-                  <Plus aria-hidden /> Nouvel emplacement
-                </button>
-                <button type="button" className="btn btn--primary btn--auto">
-                  <ScanLine aria-hidden /> Scanner un QR code
-                </button>
+                <Button variant="outline" icon={Plus} onClick={openNewLocation}>
+                  Nouvel emplacement
+                </Button>
+                <Button icon={ScanLine}>Scanner un QR code</Button>
               </div>
             </section>
 
@@ -94,7 +111,7 @@ export function Home() {
                     onSelect={select}
                   />
                 ))}
-                <NewWorkspaceCard onClick={() => {}} />
+                <NewWorkspaceCard onClick={() => { }} />
               </div>
             </section>
 
@@ -103,18 +120,23 @@ export function Home() {
                 <div className="section-head">
                   <div>
                     <nav aria-label="Fil d'Ariane" className="breadcrumb">
-                      Espaces <span aria-hidden>›</span> {current?.name}
+                      Espaces <span aria-hidden="true">›</span> {current?.name}
                     </nav>
                     <h2 id="loc-title" className="section-title">
                       Emplacements
                     </h2>
                   </div>
                 </div>
-                <div className="location-grid">
-                  {visibleLocations.map((l) => (
-                    <LocationCard key={l.id} location={l} />
-                  ))}
-                </div>
+
+                {visibleLocations.length === 0 ? (
+                  <EmptyLocations workspaceName={current?.name} onCreate={openNewLocation} />
+                ) : (
+                  <div className="location-grid">
+                    {visibleLocations.map((l) => (
+                      <LocationCard key={l.id} location={l} />
+                    ))}
+                  </div>
+                )}
               </section>
 
               <ActivityTimeline activities={ACTIVITIES} />

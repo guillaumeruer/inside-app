@@ -1,0 +1,28 @@
+.empty-locations {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 24px;
+  border: 2px dashed var(--color-border);
+  border-radius: 20px;
+  background: var(--color-surface);
+  text-align: center;
+}
+
+.empty-locations__icon {
+  width: 72px;
+  height: 72px;
+}
+
+.empty-locations__title {
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.empty-locations__text {
+  margin: 0 0 6px;
+  max-width: 420px;
+  line-height: 1.5;
+  color: var(--color-ink-muted);
+}
