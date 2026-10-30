@@ -1,0 +1,62 @@
+.kind-picker {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.kind-picker__legend {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.kind-picker__options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+}
+
+.kind-picker__option {
+  position: relative;
+  min-height: 88px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 2px solid var(--color-divider);
+  border-radius: 16px;
+  background: #fffbef;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+}
+
+.kind-picker__option:hover { border-color: var(--color-border); }
+
+/* Le radio reste accessible mais est masqué visuellement */
+.kind-picker__input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.kind-picker__option:has(.kind-picker__input:checked) {
+  border-color: var(--color-ink);
+  background: var(--color-panel);
+  box-shadow: 0 3px 0 var(--color-ink);
+}
+
+.kind-picker__option:has(.kind-picker__input:focus-visible) {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.kind-picker__icon {
+  width: 26px;
+  height: 26px;
+}

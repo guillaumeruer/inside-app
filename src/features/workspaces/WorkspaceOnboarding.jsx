@@ -3,7 +3,8 @@ import { useAuth } from '@/features/auth/useAuth';
 import { Button } from '@/shared/ui/Button';
 import { Field } from '@/shared/ui/Field';
 import { createWorkspace } from './createWorkspace';
-import { WORKSPACE_KINDS, getWorkspaceKind } from './kinds';
+import { KindPicker } from './KindPicker';
+import { getWorkspaceKind } from './kinds';
 import './WorkspaceOnboarding.css';
 
 const STEPS = [
@@ -24,7 +25,6 @@ export function WorkspaceOnboarding({ onCreated }) {
 
   function handleKindChange(nextKind) {
     setKind(nextKind);
-
     if (!nameEdited) setName(getWorkspaceKind(nextKind).defaultName);
   }
 
@@ -55,25 +55,11 @@ export function WorkspaceOnboarding({ onCreated }) {
         </div>
 
         <form className="onboarding__card" onSubmit={handleSubmit}>
-          <fieldset className="kind-picker">
-            <legend className="kind-picker__legend">C'est quoi, ton premier espace ?</legend>
-            <div className="kind-picker__options">
-              {WORKSPACE_KINDS.map(({ value, label, icon: Icon }) => (
-                <label key={value} className="kind-picker__option">
-                  <input
-                    type="radio"
-                    name="workspace-kind"
-                    value={value}
-                    checked={kind === value}
-                    onChange={() => handleKindChange(value)}
-                    className="kind-picker__input"
-                  />
-                  <Icon aria-hidden="true" className="kind-picker__icon" />
-                  <span>{label}</span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
+          <KindPicker
+            legend="C'est quoi, ton premier espace ?"
+            value={kind}
+            onChange={handleKindChange}
+          />
 
           <Field
             label="Son nom"

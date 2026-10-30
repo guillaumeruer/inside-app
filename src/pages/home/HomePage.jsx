@@ -4,6 +4,8 @@ import ActivityTimeline from '@/features/activity/ActivityTimeline';
 import { useAuth } from '@/features/auth/useAuth';
 import { EmptyLocations } from '@/features/locations/EmptyLocations';
 import LocationCard from '@/features/locations/LocationCard';
+import { NewLocationDialog } from '@/features/locations/NewLocationDialog';
+import { NewWorkspaceDialog } from '@/features/workspaces/NewWorkspaceDialog';
 import WorkspaceCard, { NewWorkspaceCard } from '@/features/workspaces/WorkspaceCard';
 import { WorkspaceOnboarding } from '@/features/workspaces/WorkspaceOnboarding';
 import AppHeader from '@/shared/AppHeader';
@@ -31,27 +33,33 @@ export function Home() {
   const firstName = user?.user_metadata?.first_name ?? '';
 
   const [query, setQuery] = useState('');
+  const [openDialog, setOpenDialog] = useState(null); // null | 'location' | 'workspace'
 
   const { status, workspaces, locations, reload } = useHomeData();
   const [selectedId, setSelectedId] = useState(() => localStorage.getItem(SELECTED_WORKSPACE_KEY));
   const activeId = workspaces.some((w) => w.id === selectedId) ? selectedId : workspaces[0]?.id;
 
   const current = workspaces.find((w) => w.id === activeId);
-  const visibleLocations = locations.filter(
-    (l) => l.workspaceId === activeId && l.parentId === null,
-  );
+  const workspaceLocations = locations.filter((l) => l.workspaceId === activeId);
+  const visibleLocations = workspaceLocations.filter((l) => l.parentId === null);
 
   const select = (id) => {
     setSelectedId(id);
     localStorage.setItem(SELECTED_WORKSPACE_KEY, id);
   };
 
+  const closeDialog = () => setOpenDialog(null);
+
   const handleWorkspaceCreated = (workspace) => {
+    closeDialog();
     select(workspace.id);
     reload();
   };
 
-  const openNewLocation = () => { };
+  const handleLocationCreated = () => {
+    closeDialog();
+    reload();
+  };
 
   useEffect(() => {
     const onVisible = () => {
@@ -91,7 +99,7 @@ export function Home() {
                 <p className="home__subtitle">Tout est rangé. Enfin, presque.</p>
               </div>
               <div className="home__actions">
-                <Button variant="outline" icon={Plus} onClick={openNewLocation}>
+                <Button variant="outline" icon={Plus} onClick={() => setOpenDialog('location')}>
                   Nouvel emplacement
                 </Button>
                 <Button icon={ScanLine}>Scanner un QR code</Button>
@@ -111,7 +119,7 @@ export function Home() {
                     onSelect={select}
                   />
                 ))}
-                <NewWorkspaceCard onClick={() => { }} />
+                <NewWorkspaceCard onClick={() => setOpenDialog('workspace')} />
               </div>
             </section>
 
@@ -129,7 +137,10 @@ export function Home() {
                 </div>
 
                 {visibleLocations.length === 0 ? (
-                  <EmptyLocations workspaceName={current?.name} onCreate={openNewLocation} />
+                  <EmptyLocations
+                    workspaceName={current?.name}
+                    onCreate={() => setOpenDialog('location')}
+                  />
                 ) : (
                   <div className="location-grid">
                     {visibleLocations.map((l) => (
@@ -141,8 +152,24 @@ export function Home() {
 
               <ActivityTimeline activities={ACTIVITIES} />
             </div>
+
+            {current && (
+              <NewLocationDialog
+                open={openDialog === 'location'}
+                onClose={closeDialog}
+                workspace={current}
+                locations={workspaceLocations}
+                onCreated={handleLocationCreated}
+              />
+            )}
           </>
         )}
+
+        <NewWorkspaceDialog
+          open={openDialog === 'workspace'}
+          onClose={closeDialog}
+          onCreated={handleWorkspaceCreated}
+        />
       </main>
     </div>
   );

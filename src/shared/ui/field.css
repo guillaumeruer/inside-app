@@ -136,3 +136,16 @@
     transition: none;
   }
 }
+
+.input--textarea {
+  height: auto;
+  min-height: 72px;
+  padding: 12px 14px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.field__optional {
+  font-weight: 500;
+  color: var(--color-ink-muted);
+}

@@ -1,0 +1,104 @@
+.dialog {
+  width: min(560px, calc(100% - 32px));
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  border: 2px solid var(--color-ink);
+  border-radius: 28px;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  box-shadow: 0 8px 0 var(--color-ink);
+  overflow-y: auto;
+}
+
+.dialog::backdrop {
+  background: rgb(59 36 20 / 0.45);
+}
+
+.dialog__panel {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dialog__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.dialog__heading {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dialog__title {
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+}
+
+.dialog__description {
+  margin: 0;
+  font-size: 15px;
+  color: var(--color-ink-muted);
+}
+
+.dialog__close {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.dialog__close:hover {
+  background: var(--color-tape);
+}
+
+.dialog__close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.dialog__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .dialog {
+    width: 100%;
+    max-width: 100%;
+    margin: auto 0 0;
+    border-width: 2px 0 0;
+    border-radius: 28px 28px 0 0;
+    box-shadow: none;
+  }
+
+  .dialog__panel {
+    padding: 20px 20px 28px;
+  }
+
+  .dialog__footer {
+    flex-direction: column-reverse;
+  }
+
+  .dialog__footer .btn {
+    width: 100%;
+  }
+}
